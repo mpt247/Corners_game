@@ -11,14 +11,9 @@ package com.vhscs3.corners;
 public class Square {
     
     private Piece piece;
-    private side side;
-    private enum side{
-        white,
-        neutral,
-        black
-    }
-
-    public Square(Piece piece, side side) {
+    private type side;
+    
+    public Square(Piece piece, type side) {
         this.piece = piece;
         this.side = side;
     }
@@ -31,11 +26,11 @@ public class Square {
         this.piece = piece;
     }
 
-    public side getSide() {
+    public type getSide() {
         return side;
     }
 
-    public void setSide(side side) {
+    public void setSide(type side) {
         this.side = side;
     }
 

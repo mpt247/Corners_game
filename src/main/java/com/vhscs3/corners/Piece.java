@@ -9,14 +9,14 @@ package com.vhscs3.corners;
  * @author mattanpaluy
  */
 public class Piece {
-    
+    //true = white, false = black
     private boolean side;
 
     public Piece(boolean side) {
         this.side = side;
     }
 
-    public boolean isSide() {
+    public boolean getSide() {
         return side;
     }
 

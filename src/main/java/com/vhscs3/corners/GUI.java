@@ -13,6 +13,7 @@ public class GUI extends javax.swing.JFrame {
     /**
      * Creates new form GUI
      */
+    private Board game;
     public GUI() {
         initComponents();
     }
@@ -27,7 +28,8 @@ public class GUI extends javax.swing.JFrame {
     private void initComponents() {
 
         newGame_button = new javax.swing.JButton();
-        Board_panel = new GraphicPanel();
+        pieces_panel = new com.vhscs3.corners.piecesGraphicPanel();
+        Board_panel = new com.vhscs3.corners.BoardGraphicPanel();
         endGame_button = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -40,6 +42,29 @@ public class GUI extends javax.swing.JFrame {
                 newGame_buttonActionPerformed(evt);
             }
         });
+
+        pieces_panel.setLocation(new java.awt.Point(-32767, -32767));
+        pieces_panel.setPreferredSize(new java.awt.Dimension(750, 750));
+        pieces_panel.setSize(new java.awt.Dimension(750, 750));
+        pieces_panel.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mousePressed(java.awt.event.MouseEvent evt) {
+                pieces_panelMousePressed(evt);
+            }
+            public void mouseReleased(java.awt.event.MouseEvent evt) {
+                pieces_panelMouseReleased(evt);
+            }
+        });
+
+        javax.swing.GroupLayout pieces_panelLayout = new javax.swing.GroupLayout(pieces_panel);
+        pieces_panel.setLayout(pieces_panelLayout);
+        pieces_panelLayout.setHorizontalGroup(
+            pieces_panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 750, Short.MAX_VALUE)
+        );
+        pieces_panelLayout.setVerticalGroup(
+            pieces_panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 750, Short.MAX_VALUE)
+        );
 
         Board_panel.setLocation(new java.awt.Point(-32767, -32767));
         Board_panel.setPreferredSize(new java.awt.Dimension(750, 750));
@@ -71,12 +96,15 @@ public class GUI extends javax.swing.JFrame {
                 .addGap(15, 15, 15)
                 .addComponent(newGame_button)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(endGame_button)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-            .addGroup(layout.createSequentialGroup()
-                .addGap(155, 155, 155)
-                .addComponent(Board_panel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(143, Short.MAX_VALUE))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(Board_panel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(endGame_button))
+                .addContainerGap(126, Short.MAX_VALUE))
+            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(layout.createSequentialGroup()
+                    .addGap(125, 125, 125)
+                    .addComponent(pieces_panel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addContainerGap(125, Short.MAX_VALUE)))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -85,21 +113,38 @@ public class GUI extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(newGame_button)
                     .addComponent(endGame_button))
-                .addGap(38, 38, 38)
+                .addGap(35, 35, 35)
                 .addComponent(Board_panel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(119, Short.MAX_VALUE))
+                .addContainerGap(72, Short.MAX_VALUE))
+            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(layout.createSequentialGroup()
+                    .addGap(75, 75, 75)
+                    .addComponent(pieces_panel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addContainerGap(75, Short.MAX_VALUE)))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
     private void newGame_buttonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_newGame_buttonActionPerformed
-        ((GraphicPanel) Board_panel).processData(true);
+        ((BoardGraphicPanel) Board_panel).processData(true);
+        Board game = new Board();
+        this.game = game;
+        ((piecesGraphicPanel) pieces_panel).processData(game, true);
     }//GEN-LAST:event_newGame_buttonActionPerformed
 
     private void endGame_buttonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_endGame_buttonActionPerformed
-        ((GraphicPanel) Board_panel).processData(false);
+        ((BoardGraphicPanel) Board_panel).processData(false);
+        ((piecesGraphicPanel) pieces_panel).processData(this.game, false);
     }//GEN-LAST:event_endGame_buttonActionPerformed
+
+    private void pieces_panelMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_pieces_panelMousePressed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_pieces_panelMousePressed
+
+    private void pieces_panelMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_pieces_panelMouseReleased
+        // TODO add your handling code here:
+    }//GEN-LAST:event_pieces_panelMouseReleased
 
     /**
      * @param args the command line arguments
@@ -140,5 +185,6 @@ public class GUI extends javax.swing.JFrame {
     private javax.swing.JPanel Board_panel;
     private javax.swing.JButton endGame_button;
     private javax.swing.JButton newGame_button;
+    private javax.swing.JPanel pieces_panel;
     // End of variables declaration//GEN-END:variables
 }

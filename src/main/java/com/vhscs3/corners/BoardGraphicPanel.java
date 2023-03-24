@@ -14,7 +14,7 @@ import javax.swing.JPanel;
  *
  * @author mattanpaluy
  */
-public class GraphicPanel extends JPanel{
+public class BoardGraphicPanel extends JPanel{
     
     private boolean game;
     
