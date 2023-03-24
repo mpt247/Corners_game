@@ -26,21 +26,80 @@ public class GUI extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        newGame_button = new javax.swing.JButton();
+        Board_panel = new GraphicPanel();
+        endGame_button = new javax.swing.JButton();
+
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setPreferredSize(new java.awt.Dimension(1000, 950));
+        setResizable(false);
+
+        newGame_button.setText("draw board");
+        newGame_button.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                newGame_buttonActionPerformed(evt);
+            }
+        });
+
+        Board_panel.setLocation(new java.awt.Point(-32767, -32767));
+        Board_panel.setPreferredSize(new java.awt.Dimension(750, 750));
+        Board_panel.setSize(new java.awt.Dimension(750, 750));
+
+        javax.swing.GroupLayout Board_panelLayout = new javax.swing.GroupLayout(Board_panel);
+        Board_panel.setLayout(Board_panelLayout);
+        Board_panelLayout.setHorizontalGroup(
+            Board_panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 750, Short.MAX_VALUE)
+        );
+        Board_panelLayout.setVerticalGroup(
+            Board_panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 750, Short.MAX_VALUE)
+        );
+
+        endGame_button.setText("erase board");
+        endGame_button.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                endGame_buttonActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 400, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addGap(15, 15, 15)
+                .addComponent(newGame_button)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(endGame_button)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addGroup(layout.createSequentialGroup()
+                .addGap(155, 155, 155)
+                .addComponent(Board_panel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(143, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 300, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addGap(20, 20, 20)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(newGame_button)
+                    .addComponent(endGame_button))
+                .addGap(38, 38, 38)
+                .addComponent(Board_panel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(119, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void newGame_buttonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_newGame_buttonActionPerformed
+        ((GraphicPanel) Board_panel).processData(true);
+    }//GEN-LAST:event_newGame_buttonActionPerformed
+
+    private void endGame_buttonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_endGame_buttonActionPerformed
+        ((GraphicPanel) Board_panel).processData(false);
+    }//GEN-LAST:event_endGame_buttonActionPerformed
 
     /**
      * @param args the command line arguments
@@ -78,5 +137,8 @@ public class GUI extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JPanel Board_panel;
+    private javax.swing.JButton endGame_button;
+    private javax.swing.JButton newGame_button;
     // End of variables declaration//GEN-END:variables
 }
