@@ -14,6 +14,8 @@ public class Game extends javax.swing.JFrame {
      * Creates new form Game
      */
     private Board game;
+    private type turn;
+    private boolean state;
     public Game() {
         initComponents();
     }
@@ -45,6 +47,14 @@ public class Game extends javax.swing.JFrame {
         Board_panel.setLocation(new java.awt.Point(-32767, -32767));
         Board_panel.setPreferredSize(new java.awt.Dimension(750, 750));
         Board_panel.setSize(new java.awt.Dimension(750, 750));
+        Board_panel.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mousePressed(java.awt.event.MouseEvent evt) {
+                Board_panelMousePressed(evt);
+            }
+            public void mouseReleased(java.awt.event.MouseEvent evt) {
+                Board_panelMouseReleased(evt);
+            }
+        });
 
         javax.swing.GroupLayout Board_panelLayout = new javax.swing.GroupLayout(Board_panel);
         Board_panel.setLayout(Board_panelLayout);
@@ -94,13 +104,46 @@ public class Game extends javax.swing.JFrame {
 
     private void newGame_buttonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_newGame_buttonActionPerformed
         Board game = new Board();
-        ((BoardGraphicPanel) Board_panel).processData(game, true);
+        this.game = game;
+        turn = type.white;
+        state = true;
+        ((BoardGraphicPanel) Board_panel).processData(this.game, state);
         
     }//GEN-LAST:event_newGame_buttonActionPerformed
 
     private void endGame_buttonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_endGame_buttonActionPerformed
-        ((BoardGraphicPanel) Board_panel).processData(game, false);
+        state = false;
+        ((BoardGraphicPanel) Board_panel).processData(game, state);
     }//GEN-LAST:event_endGame_buttonActionPerformed
+
+    private void Board_panelMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_Board_panelMousePressed
+        int mouseStartX = locationCalc(evt.getX());
+        int mouseStartY = locationCalc(evt.getY());
+        
+        Square currentSquare = game.getSquare(mouseStartX, mouseStartY);
+        currentSquare.setPiece(null);
+        game.setSquare(currentSquare, mouseStartX, mouseStartY);
+       
+        //System.out.println(mouseStartX + "," + mouseStartY);//these co-ords are relative to the component
+    }//GEN-LAST:event_Board_panelMousePressed
+
+    private void Board_panelMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_Board_panelMouseReleased
+        int mouseEndX = locationCalc(evt.getX());
+        int mouseEndY = locationCalc(evt.getY());
+        
+        Square currentSquare = game.getSquare(mouseEndX, mouseEndY);
+        if(turn == type.white) { 
+            currentSquare.setPiece(new Piece(true));
+            turn = type.black;
+        }
+        else {
+            currentSquare.setPiece(new Piece(false));
+            turn = type.white;
+        }
+        game.setSquare(currentSquare, mouseEndX, mouseEndY);
+        ((BoardGraphicPanel) Board_panel).processData(this.game, state);
+        //System.out.println(mouseEndX + "," + mouseEndY);
+    }//GEN-LAST:event_Board_panelMouseReleased
 
     /**
      * @param args the command line arguments
@@ -143,4 +186,26 @@ public class Game extends javax.swing.JFrame {
     private javax.swing.JButton endGame_button;
     private javax.swing.JButton newGame_button;
     // End of variables declaration//GEN-END:variables
+    private int locationCalc(int cordinate){
+        if(cordinate > 55 || cordinate <  695){
+            
+            if(cordinate > 615)
+                return 7;
+            else if (cordinate > 535)
+                return 6;
+            else if (cordinate > 455)
+                return 5;
+            else if (cordinate > 375)
+                return 4;
+            else if (cordinate > 295)
+                return 3;
+            else if (cordinate > 215)
+                return 2;
+            else if (cordinate > 135)
+                return 1;
+            else if (cordinate > 55)
+                return 0;
+        }
+        return -1;
+    }
 }

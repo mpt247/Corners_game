@@ -29,12 +29,4 @@ public class Square {
     public type getSide() {
         return side;
     }
-
-    public void setSide(type side) {
-        this.side = side;
-    }
-
-    
-    
-    
 }

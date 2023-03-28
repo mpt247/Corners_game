@@ -43,5 +43,5 @@ public class Board {
     
     public void setSquare(Square square, int row, int collum){
         board[row][collum] = square;
-    }
+    }    
 }
