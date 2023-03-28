@@ -19,10 +19,6 @@ public class Piece {
     public boolean getSide() {
         return side;
     }
-
-    public void setSide(boolean side) {
-        this.side = side;
-    }
     
     
 }

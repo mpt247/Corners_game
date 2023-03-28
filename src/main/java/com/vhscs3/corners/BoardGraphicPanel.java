@@ -16,10 +16,12 @@ import javax.swing.JPanel;
  */
 public class BoardGraphicPanel extends JPanel{
     
-    private boolean game;
+    private Board game;
+    private boolean state;
     
-    public void processData(boolean state) {
-        game = state;
+    public void processData(Board game, boolean state) {
+        this.game = game;
+        this.state = state;
         
         // Calls the paint, update, and paintComponent methods
         repaint();
@@ -32,9 +34,16 @@ public class BoardGraphicPanel extends JPanel{
         super.paintComponent(g);
         
         // Code to draw graphics
-        if(game){
-            //draw board if game is true
-            g.setColor(Color.CYAN);
+        if(state){
+            //if a game is active draw game
+            drawBoard(g);
+            drawPieces(g, game);
+            
+        }
+    }
+    
+    private void drawBoard(Graphics g) {
+        g.setColor(Color.CYAN);
             g.fillRect(0, 0, getWidth(), getWidth());
             g.setColor(Color.BLUE);
             g.fillRect(55, 55, 650, 650);
@@ -63,6 +72,27 @@ public class BoardGraphicPanel extends JPanel{
                 }
                 squareX += squareSize;
             }
-        }
+    }
+    
+    private void drawPieces(Graphics g, Board game) {
+        int locationX = 60;
+            int squareSize = 640/8;
+
+            for(int row = 0; row < 8; row++){
+                int locationY = 60;
+                for(int collum = 0; collum < 8; collum++){
+                    Square current = game.getSquare(row, collum);
+                    if(current.getPiece() != null){
+                        if(current.getPiece().getSide())
+                            g.setColor(Color.WHITE);
+                        else
+                            g.setColor(Color.BLACK);
+
+                        g.fillOval(locationX, locationY, squareSize, squareSize);
+                    }
+                    locationY += squareSize;
+                }
+                locationX += squareSize;
+            }
     }
 }
