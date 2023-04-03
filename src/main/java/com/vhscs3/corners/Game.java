@@ -4,6 +4,10 @@
  */
 package com.vhscs3.corners;
 
+import java.util.Scanner;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 /**
  *
  * @author mattanpaluy
@@ -14,8 +18,9 @@ public class Game extends javax.swing.JFrame {
      * Creates new form Game
      */
     private Board game;
-    private type turn;
     private boolean state;
+    private int startX = -1;
+    private int startY = -1;
     public Game() {
         initComponents();
     }
@@ -48,11 +53,8 @@ public class Game extends javax.swing.JFrame {
         Board_panel.setPreferredSize(new java.awt.Dimension(750, 750));
         Board_panel.setSize(new java.awt.Dimension(750, 750));
         Board_panel.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mousePressed(java.awt.event.MouseEvent evt) {
-                Board_panelMousePressed(evt);
-            }
-            public void mouseReleased(java.awt.event.MouseEvent evt) {
-                Board_panelMouseReleased(evt);
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                Board_panelMouseClicked(evt);
             }
         });
 
@@ -105,7 +107,6 @@ public class Game extends javax.swing.JFrame {
     private void newGame_buttonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_newGame_buttonActionPerformed
         Board game = new Board();
         this.game = game;
-        turn = type.white;
         state = true;
         ((BoardGraphicPanel) Board_panel).processData(this.game, state);
         
@@ -116,34 +117,34 @@ public class Game extends javax.swing.JFrame {
         ((BoardGraphicPanel) Board_panel).processData(game, state);
     }//GEN-LAST:event_endGame_buttonActionPerformed
 
-    private void Board_panelMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_Board_panelMousePressed
-        int mouseStartX = locationCalc(evt.getX());
-        int mouseStartY = locationCalc(evt.getY());
+    private void Board_panelMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_Board_panelMouseClicked
+        int mouseX = locationCalc(evt.getX());
+        int mouseY = locationCalc(evt.getY());
         
-        Square currentSquare = game.getSquare(mouseStartX, mouseStartY);
-        currentSquare.setPiece(null);
-        game.setSquare(currentSquare, mouseStartX, mouseStartY);
-       
-        //System.out.println(mouseStartX + "," + mouseStartY);//these co-ords are relative to the component
-    }//GEN-LAST:event_Board_panelMousePressed
-
-    private void Board_panelMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_Board_panelMouseReleased
-        int mouseEndX = locationCalc(evt.getX());
-        int mouseEndY = locationCalc(evt.getY());
-        
-        Square currentSquare = game.getSquare(mouseEndX, mouseEndY);
-        if(turn == type.white) { 
-            currentSquare.setPiece(new Piece(true));
-            turn = type.black;
+        if (startX == -1 || startY == -1){
+            //if current square is empty and the piece you picked is yours 
+            if(game.getSquare(mouseX, mouseY).getPiece() != null)
+                
+                if (game.getTurn() == type.white && game.getSquare(mouseX, mouseY).getPiece().getSide()){
+                    startX = mouseX;
+                    startY = mouseY;
+                    game.setSelectedX(startX);
+                    game.setSelectedY(startY);
+                    ((BoardGraphicPanel) Board_panel).processData(this.game, state);
+                }
+                else if (game.getTurn() == type.black && game.getSquare(mouseX, mouseY).getPiece().getSide() == false) {
+                    startX = mouseX;
+                    startY = mouseY;
+                    game.setSelectedX(startX);
+                    game.setSelectedY(startY);
+                    ((BoardGraphicPanel) Board_panel).processData(this.game, state);
+                }
+        }else {
+            //if(leagal move)
+            gameMove(mouseX, mouseY);
+            ((BoardGraphicPanel) Board_panel).processData(this.game, state);
         }
-        else {
-            currentSquare.setPiece(new Piece(false));
-            turn = type.white;
-        }
-        game.setSquare(currentSquare, mouseEndX, mouseEndY);
-        ((BoardGraphicPanel) Board_panel).processData(this.game, state);
-        //System.out.println(mouseEndX + "," + mouseEndY);
-    }//GEN-LAST:event_Board_panelMouseReleased
+    }//GEN-LAST:event_Board_panelMouseClicked
 
     /**
      * @param args the command line arguments
@@ -207,5 +208,28 @@ public class Game extends javax.swing.JFrame {
                 return 0;
         }
         return -1;
+    }
+
+    private void gameMove(int endX, int endY) {
+        
+        //start Square clean
+        Square start = game.getSquare(startX, startY);
+        Piece piece = start.getPiece();
+        start.setPiece(null);
+        game.setSquare(start, startX, startY);
+        //end Square push
+        Square end = game.getSquare(endX, endY);
+        end.setPiece(piece);
+        game.setSquare(end, endX, endY);
+         
+        //clear current move log and change to next move
+        startX = -1;
+        startY = -1;
+        game.setSelectedX(startX);
+        game.setSelectedY(startY);
+        if(game.getTurn() == type.white)
+            game.setTurn(type.black);
+        else if(game.getTurn() == type.black)
+            game.setTurn(type.white);
     }
 }

@@ -7,7 +7,8 @@ package com.vhscs3.corners;
 
 import java.awt.Color;
 import java.awt.Graphics;
-import java.util.Scanner;
+import java.awt.Graphics2D;
+import java.awt.*;
 import javax.swing.JPanel;
 
 /**
@@ -38,6 +39,8 @@ public class BoardGraphicPanel extends JPanel{
             //if a game is active draw game
             drawBoard(g);
             drawPieces(g, game);
+            if (game.getSelectedX() != -1 || game.getSelectedY() != -1 )
+                drawSelected(g);
             
         }
     }
@@ -76,23 +79,43 @@ public class BoardGraphicPanel extends JPanel{
     
     private void drawPieces(Graphics g, Board game) {
         int locationX = 60;
-            int squareSize = 640/8;
+        int squareSize = 640/8;
+        
+        Graphics2D g2 = (Graphics2D) g;
+        for(int row = 0; row < 8; row++){
+            int locationY = 60;
+            for(int collum = 0; collum < 8; collum++){
+                Square current = game.getSquare(row, collum);
+                if(current.getPiece() != null){
+                    if(current.getPiece().getSide())
+                        g.setColor(Color.WHITE);
+                    else
+                        g.setColor(Color.BLACK);
 
-            for(int row = 0; row < 8; row++){
-                int locationY = 60;
-                for(int collum = 0; collum < 8; collum++){
-                    Square current = game.getSquare(row, collum);
-                    if(current.getPiece() != null){
+                    g.fillOval(locationX, locationY, squareSize, squareSize);
+                    g.setColor(Color.MAGENTA);
+                    g2.setStroke(new BasicStroke(3));
+                    if(game.getTurn() == type.white){
                         if(current.getPiece().getSide())
-                            g.setColor(Color.WHITE);
-                        else
-                            g.setColor(Color.BLACK);
+                            g2.drawOval(locationX, locationY, squareSize, squareSize);
 
-                        g.fillOval(locationX, locationY, squareSize, squareSize);
-                    }
-                    locationY += squareSize;
+                    }else
+                        if(current.getPiece().getSide() == false)
+                            g2.drawOval(locationX, locationY, squareSize, squareSize);
                 }
-                locationX += squareSize;
+                locationY += squareSize;
             }
+            locationX += squareSize;
+        }
+    }
+    
+    private void drawSelected(Graphics g){
+        Color selectedColor = new Color(255, 0, 255, 125 );
+        int locationX = 60 + (80 * game.getSelectedX());
+        int locationY = 60 + (80 * game.getSelectedY());
+        g.setColor(selectedColor);
+        g.fillRect(locationX, locationY, 80, 80);
+        
+        //draw leagl moves
     }
 }
