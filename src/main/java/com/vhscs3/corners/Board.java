@@ -18,6 +18,7 @@ public class Board {
     private Square[][] board;
     private int selectedX = -1;
     private int selectedY = -1;
+    int[][] currLeagalMoves = new int[8][8];
     
     public Board() {
         turn = type.white;
@@ -72,4 +73,35 @@ public class Board {
         this.selectedY = selectedY;
     }
     
+    public int[][] leagalMove(){
+        for (int r = 0; r < currLeagalMoves.length; r++)
+            for (int c = 0; c < currLeagalMoves.length; c++)
+                currLeagalMoves[r][c] = 0;
+        boolean start = true;
+        
+        return leagalMove(selectedX, selectedY, start);
+    }
+    
+    private int[][] leagalMove(int row, int col, boolean move){
+        if(row == 8 || col ==8 || row == -1 || col == -1){
+            return currLeagalMoves;
+        } else {
+            if(getSquare(row, col).getPiece() != null && move == false){
+                currLeagalMoves[row][col] = 0;
+                move = true;
+            }else{
+                if(getSquare(row, col).getPiece() == null && move){
+                    currLeagalMoves[row][col] = 1;
+                    move = false;
+                }else
+                    return currLeagalMoves;
+            }
+            leagalMove(row + 1, col, move);
+            leagalMove(row - 1, col, move);
+            leagalMove(row, col + 1, move);
+            leagalMove(row, col - 1, move);
+        }
+        
+        return currLeagalMoves;
+    }
 }

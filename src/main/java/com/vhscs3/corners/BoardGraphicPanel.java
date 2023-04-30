@@ -91,17 +91,19 @@ public class BoardGraphicPanel extends JPanel{
                         g.setColor(Color.WHITE);
                     else
                         g.setColor(Color.BLACK);
-
+                    
+                    //draw rings around player turn
+                    
                     g.fillOval(locationX, locationY, squareSize, squareSize);
                     g.setColor(Color.MAGENTA);
                     g2.setStroke(new BasicStroke(3));
                     if(game.getTurn() == type.white){
                         if(current.getPiece().getSide())
                             g2.drawOval(locationX, locationY, squareSize, squareSize);
-
                     }else
                         if(current.getPiece().getSide() == false)
                             g2.drawOval(locationX, locationY, squareSize, squareSize);
+                    
                 }
                 locationY += squareSize;
             }
@@ -110,6 +112,7 @@ public class BoardGraphicPanel extends JPanel{
     }
     
     private void drawSelected(Graphics g){
+        //draw selected
         Color selectedColor = new Color(255, 0, 255, 125 );
         int locationX = 60 + (80 * game.getSelectedX());
         int locationY = 60 + (80 * game.getSelectedY());
@@ -117,5 +120,17 @@ public class BoardGraphicPanel extends JPanel{
         g.fillRect(locationX, locationY, 80, 80);
         
         //draw leagl moves
+        int[][] moves = game.leagalMove();
+        
+        for(int row = 0; row < 8; row++){
+             for(int collum = 0; collum < 8; collum++){
+                 if(moves[row][collum] == 1){
+                    locationX = 60 + (80 * row);
+                    locationY = 60 + (80 * collum);
+                    g.fillRect(locationX, locationY, 80, 80); 
+                 }
+             }
+        }
+        
     }
 }
