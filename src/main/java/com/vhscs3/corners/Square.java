@@ -9,10 +9,10 @@ package com.vhscs3.corners;
  * @author mattanpaluy
  */
 public class Square {
-    
+
     private Piece piece;
     private type side;
-    
+
     public Square(Piece piece, type side) {
         this.piece = piece;
         this.side = side;

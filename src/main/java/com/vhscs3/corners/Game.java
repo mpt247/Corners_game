@@ -21,12 +21,12 @@ public class Game extends javax.swing.JFrame {
     private boolean state;
     private int startX = -1;
     private int startY = -1;
+
     public Game() {
         initComponents();
         win_dialog.setVisible(false);
     }
-        
-       
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -42,7 +42,6 @@ public class Game extends javax.swing.JFrame {
         newGame_win_button = new javax.swing.JButton();
         newGame_button = new javax.swing.JButton();
         Board_panel = new com.vhscs3.corners.BoardGraphicPanel();
-        endGame_button = new javax.swing.JButton();
 
         win_dialog.setAlwaysOnTop(true);
         win_dialog.setBackground(new java.awt.Color(102, 153, 255));
@@ -93,10 +92,13 @@ public class Game extends javax.swing.JFrame {
         );
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setPreferredSize(new java.awt.Dimension(1000, 950));
+        setBackground(new java.awt.Color(245, 188, 98));
         setResizable(false);
 
-        newGame_button.setText("draw board");
+        newGame_button.setBackground(new java.awt.Color(255, 167, 28));
+        newGame_button.setFont(new java.awt.Font("Malayalam MN", 1, 36)); // NOI18N
+        newGame_button.setForeground(new java.awt.Color(255, 255, 255));
+        newGame_button.setText("New Game");
         newGame_button.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 newGame_buttonActionPerformed(evt);
@@ -123,34 +125,25 @@ public class Game extends javax.swing.JFrame {
             .addGap(0, 750, Short.MAX_VALUE)
         );
 
-        endGame_button.setText("erase board");
-        endGame_button.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                endGame_buttonActionPerformed(evt);
-            }
-        });
-
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(15, 15, 15)
-                .addComponent(newGame_button)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(Board_panel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(endGame_button))
-                .addContainerGap(126, Short.MAX_VALUE))
+                .addGap(122, 122, 122)
+                .addComponent(Board_panel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(128, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(newGame_button, javax.swing.GroupLayout.PREFERRED_SIZE, 266, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(719, 719, 719))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addGap(20, 20, 20)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(newGame_button)
-                    .addComponent(endGame_button))
-                .addGap(35, 35, 35)
+                .addComponent(newGame_button, javax.swing.GroupLayout.PREFERRED_SIZE, 52, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(Board_panel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(122, Short.MAX_VALUE))
         );
@@ -159,27 +152,34 @@ public class Game extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void newGame_buttonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_newGame_buttonActionPerformed
+        // a button to start a new game. when pressed it will erase all previous data and create a new game
+        state = false;
+        ((BoardGraphicPanel) Board_panel).processData(game, state);
         Board game = new Board();
         this.game = game;
         state = true;
         ((BoardGraphicPanel) Board_panel).processData(this.game, state);
-        
+
     }//GEN-LAST:event_newGame_buttonActionPerformed
 
-    private void endGame_buttonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_endGame_buttonActionPerformed
-        state = false;
-        ((BoardGraphicPanel) Board_panel).processData(game, state);
-    }//GEN-LAST:event_endGame_buttonActionPerformed
-
     private void Board_panelMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_Board_panelMousePressed
+        //this method handles interactions of users with the gui
         int mouseX = locationCalc(evt.getX());
         int mouseY = locationCalc(evt.getY());
-        
-        if (startX == -1 || startY == -1){
-            //if current square is empty and the piece you picked is yours 
-            if(game.getSquare(mouseX, mouseY).getPiece() != null)
-                
-                if (game.getTurn() == type.white && game.getSquare(mouseX, mouseY).getPiece().getSide()){
+
+        //if current square is empty and the piece you picked is yours
+        if (startX == -1 || startY == -1) {
+            if (game.getSquare(mouseX, mouseY).getPiece() != null) //if whites turn 
+            {
+                if (game.getTurn() == type.white && game.getSquare(mouseX, mouseY).getPiece().getSide()) {
+                    startX = mouseX;
+                    startY = mouseY;
+                    game.setSelectedX(startX);
+                    game.setSelectedY(startY);
+                    //show leagal moves
+                    ((BoardGraphicPanel) Board_panel).processData(this.game, state);
+                } //if blacks turn
+                else if (game.getTurn() == type.black && game.getSquare(mouseX, mouseY).getPiece().getSide() == false) {
                     startX = mouseX;
                     startY = mouseY;
                     game.setSelectedX(startX);
@@ -187,26 +187,28 @@ public class Game extends javax.swing.JFrame {
                     //show leagal moves
                     ((BoardGraphicPanel) Board_panel).processData(this.game, state);
                 }
-                else if (game.getTurn() == type.black && game.getSquare(mouseX, mouseY).getPiece().getSide() == false) {
-                    startX = mouseX;
-                    startY = mouseY;
-                    game.setSelectedX(startX);
-                    game.setSelectedY(startY);
-                    ((BoardGraphicPanel) Board_panel).processData(this.game, state);
-                }
-            //run check/show leagal move
-        }else {
-            //if(leagal move)
-            gameMove(mouseX, mouseY);
-            
+            }
+            //a current square is selected and the evnt is to make a move
+        } else {
+            //check if move is leagal if yes move
+            if (leagalMove(mouseX, mouseY)) {
+                gameMove(mouseX, mouseY);
+            } //if no the game assumes that the player is choosing to select another piece
+            else {
+                startX = -1;
+                startY = -1;
+                game.setSelectedX(startX);
+                game.setSelectedY(startY);
+            }
+
             //check if someone won
             type win = gameWon();
-            if(win != type.neutral){
-                if(win == type.white){
+            if (win != type.neutral) {
+                if (win == type.white) {
                     System.out.println("white wins");
                     win_textField.setText("WHITE WINS");
                     win_dialog.setVisible(true);
-                }else{
+                } else {
                     System.out.println("black wins");
                     win_textField.setText("BLACK WINS");
                     win_dialog.setVisible(true);
@@ -255,94 +257,99 @@ public class Game extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel Board_panel;
-    private javax.swing.JButton endGame_button;
     private javax.swing.JButton menu_button;
     private javax.swing.JButton newGame_button;
     private javax.swing.JButton newGame_win_button;
     private javax.swing.JDialog win_dialog;
     private javax.swing.JTextField win_textField;
     // End of variables declaration//GEN-END:variables
-    private int locationCalc(int cordinate){
-        if(cordinate > 55 || cordinate <  695){
-            
-            if(cordinate > 615)
+    private int locationCalc(int cordinate) {
+        //when ran this method translates a given int on the 
+        if (cordinate > 55 || cordinate < 695) {
+
+            if (cordinate > 615) {
                 return 7;
-            else if (cordinate > 535)
+            } else if (cordinate > 535) {
                 return 6;
-            else if (cordinate > 455)
+            } else if (cordinate > 455) {
                 return 5;
-            else if (cordinate > 375)
+            } else if (cordinate > 375) {
                 return 4;
-            else if (cordinate > 295)
+            } else if (cordinate > 295) {
                 return 3;
-            else if (cordinate > 215)
+            } else if (cordinate > 215) {
                 return 2;
-            else if (cordinate > 135)
+            } else if (cordinate > 135) {
                 return 1;
-            else if (cordinate > 55)
+            } else if (cordinate > 55) {
                 return 0;
+            }
         }
         return -1;
     }
 
     private void gameMove(int endX, int endY) {
-        
+
         //start Square clean
         Square start = game.getSquare(startX, startY);
         Piece piece = start.getPiece();
         start.setPiece(null);
         game.setSquare(start, startX, startY);
+
         //end Square push
         Square end = game.getSquare(endX, endY);
         end.setPiece(piece);
         game.setSquare(end, endX, endY);
-         
+
         //clear current move log and change to next move
         startX = -1;
         startY = -1;
         game.setSelectedX(startX);
         game.setSelectedY(startY);
-        if(game.getTurn() == type.white)
+        if (game.getTurn() == type.white) {
             game.setTurn(type.black);
-        else if(game.getTurn() == type.black)
+        } else if (game.getTurn() == type.black) {
             game.setTurn(type.white);
+        }
     }
-    private boolean leagalMove(int endX, int endY){
-        Square endSquare = game.getSquare(endX, endY);
-        if(endSquare.getPiece() == null){
-            
+
+    private boolean leagalMove(int endX, int endY) {
+        int[][] currLeagal = game.getCurrLeagalMoves();
+        if (currLeagal[endX][endY] == 1) {
+            return true;
         }
         return false;
     }
-    
-    private type gameWon(){
+
+    private type gameWon() {
         final int winCondition = 9;
         int white = 0;
         int black = 0;
-        for(int row = 0; row < 3; row++){
-            for(int collum = 5; collum < 8; collum++){
+        for (int row = 0; row < 3; row++) {
+            for (int collum = 5; collum < 8; collum++) {
                 Square curr = game.getSquare(row, collum);
-                if(curr.getPiece() != null){
-                    if(curr.getPiece().getSide() == false){
+                if (curr.getPiece() != null) {
+                    if (curr.getPiece().getSide() == false) {
                         black++;
                     }
                 }
             }
         }
-        for(int row = 5; row < 8; row++){
-            for(int collum = 0; collum < 3; collum++){
+        for (int row = 5; row < 8; row++) {
+            for (int collum = 0; collum < 3; collum++) {
                 Square curr = game.getSquare(row, collum);
-                if(curr.getPiece() != null){
-                    if(curr.getPiece().getSide()){
+                if (curr.getPiece() != null) {
+                    if (curr.getPiece().getSide()) {
                         white++;
                     }
                 }
             }
         }
-        if (white == winCondition)
+        if (white == winCondition) {
             return type.white;
-        else if (black == winCondition)
+        } else if (black == winCondition) {
             return type.black;
+        }
         return type.neutral;
-    }  
+    }
 }

@@ -9,6 +9,7 @@ package com.vhscs3.corners;
  * @author mattanpaluy
  */
 public class Piece {
+
     //true = white, false = black
     private boolean side;
 
@@ -19,6 +20,5 @@ public class Piece {
     public boolean getSide() {
         return side;
     }
-    
-    
+
 }
