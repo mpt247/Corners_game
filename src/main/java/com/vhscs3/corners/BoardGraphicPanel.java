@@ -37,6 +37,7 @@ public class BoardGraphicPanel extends JPanel {
         if (state) {
             //if a game is active draw game
             drawBoard(g);
+            drawBase(g);
             drawPieces(g, game);
             if (game.getSelectedX() != -1 || game.getSelectedY() != -1) {
                 drawSelected(g);
@@ -134,5 +135,21 @@ public class BoardGraphicPanel extends JPanel {
             }
         }
 
+    }
+
+    private void drawBase(Graphics g) {
+        int locationX = 60;
+        int locationY = 60;
+        int squareSize = 640 / 8;
+
+        
+        Graphics2D g2 = (Graphics2D) g;
+        g2.setStroke(new BasicStroke(3));
+        
+        g2.setColor(Color.WHITE);
+        g2.drawRect(locationX, locationY + (squareSize * 5), squareSize * 3, squareSize * 3);
+
+        g2.setColor(Color.BLACK);
+        g2.drawRect(locationX + (squareSize * 5), locationY, squareSize * 3, squareSize * 3);
     }
 }

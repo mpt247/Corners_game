@@ -117,24 +117,25 @@ public class Board {
     }
 
     private void calculateJumpMoves(int row, int col, boolean[][] visited) {
+    int[] rowDirections = {0, 0, -1, 1};
+    int[] colDirections = {-1, 1, 0, 0};
 
-        int[] rowDirections = {0, 0, -1, 1};
-        int[] colDirections = {-1, 1, 0, 0};
-
-        visited[row][col] = true;
-        for (int k = 0; k < 4; k++) {
-            int newRow = row + rowDirections[k];
-            int newCol = col + colDirections[k];
-            int jumpRow = newRow + rowDirections[k];
-            int jumpCol = newCol + colDirections[k];
-            if (isInBounds(jumpRow, jumpCol) && isInBounds(newRow, newCol) && board[jumpRow][jumpCol].getPiece() == null && board[newRow][newCol].getPiece() != null && visited[jumpRow][jumpCol] == false) {
-                currLegalMoves[jumpRow][jumpCol] = LEGAL_MOVE;
-            }
+    visited[row][col] = true;
+    for (int k = 0; k < 4; k++) {
+        int newRow = row + rowDirections[k];
+        int newCol = col + colDirections[k];
+        int jumpRow = newRow + rowDirections[k];
+        int jumpCol = newCol + colDirections[k];
+        if (isInBounds(jumpRow, jumpCol) && isInBounds(newRow, newCol) && board[jumpRow][jumpCol].getPiece() == null && board[newRow][newCol].getPiece() != null && visited[jumpRow][jumpCol] == false) {
+            currLegalMoves[jumpRow][jumpCol] = LEGAL_MOVE;
+            
             // Recursively check for further jumps from the new position
             calculateJumpMoves(jumpRow, jumpCol, visited);
         }
-        visited[row][col] = false;
     }
+    visited[row][col] = false;
+}
+
 
     private boolean isInBounds(int row, int col) {
         return row >= 0 && row < 8 && col >= 0 && col < 8;

@@ -7,6 +7,7 @@ package com.vhscs3.corners;
 import java.util.Scanner;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -24,7 +25,14 @@ public class Game extends javax.swing.JFrame {
 
     public Game() {
         initComponents();
+        getContentPane().setBackground(new java.awt.Color(245, 188, 98));
         win_dialog.setVisible(false);
+        state = false;
+        back_button.setVisible(false);
+        rules_textArea.setVisible(false);
+        rules_scrollPane.setVisible(false);
+        mainMenu();
+        
     }
 
     /**
@@ -40,11 +48,16 @@ public class Game extends javax.swing.JFrame {
         win_textField = new javax.swing.JTextField();
         menu_button = new javax.swing.JButton();
         newGame_win_button = new javax.swing.JButton();
-        newGame_button = new javax.swing.JButton();
         Board_panel = new com.vhscs3.corners.BoardGraphicPanel();
+        newGame_button = new javax.swing.JButton();
+        rules_button = new javax.swing.JButton();
+        rules_scrollPane = new javax.swing.JScrollPane();
+        rules_textArea = new javax.swing.JTextArea();
+        title_textField = new javax.swing.JTextField();
+        back_button = new javax.swing.JButton();
 
         win_dialog.setAlwaysOnTop(true);
-        win_dialog.setBackground(new java.awt.Color(102, 153, 255));
+        win_dialog.setBackground(new java.awt.Color(245, 188, 98));
         win_dialog.setMinimumSize(new java.awt.Dimension(400, 300));
 
         win_textField.setEditable(false);
@@ -59,11 +72,21 @@ public class Game extends javax.swing.JFrame {
         menu_button.setFont(new java.awt.Font("Helvetica Neue", 0, 24)); // NOI18N
         menu_button.setForeground(new java.awt.Color(255, 255, 204));
         menu_button.setText("Main Menu");
+        menu_button.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                menu_buttonActionPerformed(evt);
+            }
+        });
 
         newGame_win_button.setBackground(new java.awt.Color(51, 51, 255));
         newGame_win_button.setFont(new java.awt.Font("Helvetica Neue", 0, 24)); // NOI18N
         newGame_win_button.setForeground(new java.awt.Color(255, 255, 204));
         newGame_win_button.setText("New Game");
+        newGame_win_button.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                newGame_win_buttonActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout win_dialogLayout = new javax.swing.GroupLayout(win_dialog.getContentPane());
         win_dialog.getContentPane().setLayout(win_dialogLayout);
@@ -92,19 +115,12 @@ public class Game extends javax.swing.JFrame {
         );
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setAutoRequestFocus(false);
         setBackground(new java.awt.Color(245, 188, 98));
+        setPreferredSize(new java.awt.Dimension(1000, 1000));
         setResizable(false);
 
-        newGame_button.setBackground(new java.awt.Color(255, 167, 28));
-        newGame_button.setFont(new java.awt.Font("Malayalam MN", 1, 36)); // NOI18N
-        newGame_button.setForeground(new java.awt.Color(255, 255, 255));
-        newGame_button.setText("New Game");
-        newGame_button.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                newGame_buttonActionPerformed(evt);
-            }
-        });
-
+        Board_panel.setBackground(new java.awt.Color(245, 188, 98));
         Board_panel.setLocation(new java.awt.Point(-32767, -32767));
         Board_panel.setPreferredSize(new java.awt.Dimension(750, 750));
         Board_panel.setSize(new java.awt.Dimension(750, 750));
@@ -114,38 +130,111 @@ public class Game extends javax.swing.JFrame {
             }
         });
 
+        newGame_button.setBackground(new java.awt.Color(255, 167, 28));
+        newGame_button.setFont(new java.awt.Font("Malayalam MN", 1, 48)); // NOI18N
+        newGame_button.setForeground(new java.awt.Color(255, 255, 255));
+        newGame_button.setText("New Game");
+        newGame_button.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                newGame_buttonActionPerformed(evt);
+            }
+        });
+
+        rules_button.setBackground(new java.awt.Color(255, 167, 28));
+        rules_button.setFont(new java.awt.Font("Malayalam MN", 1, 48)); // NOI18N
+        rules_button.setForeground(new java.awt.Color(255, 255, 255));
+        rules_button.setText("Rules");
+        rules_button.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                rules_buttonActionPerformed(evt);
+            }
+        });
+
+        rules_scrollPane.setBorder(null);
+
+        rules_textArea.setEditable(false);
+        rules_textArea.setBackground(new java.awt.Color(0, 255, 255));
+        rules_textArea.setColumns(20);
+        rules_textArea.setFont(new java.awt.Font("Malayalam MN", 0, 18)); // NOI18N
+        rules_textArea.setForeground(new java.awt.Color(0, 0, 0));
+        rules_textArea.setLineWrap(true);
+        rules_textArea.setRows(5);
+        rules_textArea.setText(" The game is played on a 8 x 8 grid board (chess-like board).\n Both players start off with square arrangements of 9 game pieces \n in opposing corners of the gameboard. \n Each player's goal is to move all their pieces from the starting corner \n to the corner occupied by the opponent at the start of the game\n (enemy base). Players take turns moving one game piece.\n A piece may move into an empty destination, \n provided either of the following conditions are met:\n\n 1.the destination square is adjacent to the starting square.\n 2.the destination square can be reached by consecutive \"jumps\" over\n    other game pieces belonging to either player.\n\n whoever can get their pieces to the enemy base first wins.");
+        rules_textArea.setBorder(null);
+        rules_scrollPane.setViewportView(rules_textArea);
+
         javax.swing.GroupLayout Board_panelLayout = new javax.swing.GroupLayout(Board_panel);
         Board_panel.setLayout(Board_panelLayout);
         Board_panelLayout.setHorizontalGroup(
             Board_panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 750, Short.MAX_VALUE)
+            .addGroup(Board_panelLayout.createSequentialGroup()
+                .addGroup(Board_panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(Board_panelLayout.createSequentialGroup()
+                        .addGap(216, 216, 216)
+                        .addGroup(Board_panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(rules_button, javax.swing.GroupLayout.PREFERRED_SIZE, 324, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(newGame_button, javax.swing.GroupLayout.PREFERRED_SIZE, 324, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addGroup(Board_panelLayout.createSequentialGroup()
+                        .addGap(65, 65, 65)
+                        .addComponent(rules_scrollPane, javax.swing.GroupLayout.PREFERRED_SIZE, 610, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(75, Short.MAX_VALUE))
         );
         Board_panelLayout.setVerticalGroup(
             Board_panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 750, Short.MAX_VALUE)
+            .addGroup(Board_panelLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(newGame_button)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(rules_button)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(rules_scrollPane, javax.swing.GroupLayout.PREFERRED_SIZE, 416, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(164, Short.MAX_VALUE))
         );
+
+        title_textField.setEditable(false);
+        title_textField.setBackground(new java.awt.Color(245, 188, 98));
+        title_textField.setFont(new java.awt.Font("Malayalam MN", 1, 64)); // NOI18N
+        title_textField.setForeground(new java.awt.Color(255, 255, 255));
+        title_textField.setHorizontalAlignment(javax.swing.JTextField.CENTER);
+        title_textField.setText("Corners");
+        title_textField.setBorder(null);
+
+        back_button.setBackground(new java.awt.Color(255, 167, 28));
+        back_button.setFont(new java.awt.Font("Malayalam MN", 0, 24)); // NOI18N
+        back_button.setForeground(new java.awt.Color(255, 255, 255));
+        back_button.setText("< Back");
+        back_button.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                back_buttonActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(122, 122, 122)
-                .addComponent(Board_panel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(128, Short.MAX_VALUE))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(newGame_button, javax.swing.GroupLayout.PREFERRED_SIZE, 266, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(719, 719, 719))
+                .addGap(100, 100, 100)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
+                    .addComponent(title_textField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(Board_panel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(back_button)
+                .addGap(20, 20, 20))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(20, 20, 20)
-                .addComponent(newGame_button, javax.swing.GroupLayout.PREFERRED_SIZE, 52, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addContainerGap()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(title_textField, javax.swing.GroupLayout.PREFERRED_SIZE, 55, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(12, 12, 12))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addComponent(back_button)
+                        .addGap(18, 18, 18)))
                 .addComponent(Board_panel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(122, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         pack();
@@ -158,66 +247,124 @@ public class Game extends javax.swing.JFrame {
         Board game = new Board();
         this.game = game;
         state = true;
+        mainMenu();
+        back_button.setVisible(true);
         ((BoardGraphicPanel) Board_panel).processData(this.game, state);
 
     }//GEN-LAST:event_newGame_buttonActionPerformed
 
     private void Board_panelMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_Board_panelMousePressed
         //this method handles interactions of users with the gui
-        int mouseX = locationCalc(evt.getX());
-        int mouseY = locationCalc(evt.getY());
+        if (state) {
+            int mouseX = locationCalc(evt.getX());
+            int mouseY = locationCalc(evt.getY());
 
-        //if current square is empty and the piece you picked is yours
-        if (startX == -1 || startY == -1) {
-            if (game.getSquare(mouseX, mouseY).getPiece() != null) //if whites turn 
-            {
-                if (game.getTurn() == type.white && game.getSquare(mouseX, mouseY).getPiece().getSide()) {
-                    startX = mouseX;
-                    startY = mouseY;
+            //if current square is empty and the piece you picked is yours
+            if (startX == -1 || startY == -1) {
+                if (game.getSquare(mouseX, mouseY).getPiece() != null) //if whites turn 
+                {
+                    if (game.getTurn() == type.white && game.getSquare(mouseX, mouseY).getPiece().getSide()) {
+                        startX = mouseX;
+                        startY = mouseY;
+                        game.setSelectedX(startX);
+                        game.setSelectedY(startY);
+                        //show leagal moves
+                        ((BoardGraphicPanel) Board_panel).processData(this.game, state);
+                    } //if blacks turn
+                    else if (game.getTurn() == type.black && game.getSquare(mouseX, mouseY).getPiece().getSide() == false) {
+                        startX = mouseX;
+                        startY = mouseY;
+                        game.setSelectedX(startX);
+                        game.setSelectedY(startY);
+                        //show leagal moves
+                        ((BoardGraphicPanel) Board_panel).processData(this.game, state);
+                    }
+                }
+                //a current square is selected and the evnt is to make a move
+            } else {
+                //check if move is leagal if yes move
+                if (leagalMove(mouseX, mouseY)) {
+                    gameMove(mouseX, mouseY);
+                } //if no the game assumes that the player is choosing to select another piece
+                else {
+                    startX = -1;
+                    startY = -1;
                     game.setSelectedX(startX);
                     game.setSelectedY(startY);
-                    //show leagal moves
-                    ((BoardGraphicPanel) Board_panel).processData(this.game, state);
-                } //if blacks turn
-                else if (game.getTurn() == type.black && game.getSquare(mouseX, mouseY).getPiece().getSide() == false) {
-                    startX = mouseX;
-                    startY = mouseY;
-                    game.setSelectedX(startX);
-                    game.setSelectedY(startY);
-                    //show leagal moves
-                    ((BoardGraphicPanel) Board_panel).processData(this.game, state);
                 }
-            }
-            //a current square is selected and the evnt is to make a move
-        } else {
-            //check if move is leagal if yes move
-            if (leagalMove(mouseX, mouseY)) {
-                gameMove(mouseX, mouseY);
-            } //if no the game assumes that the player is choosing to select another piece
-            else {
-                startX = -1;
-                startY = -1;
-                game.setSelectedX(startX);
-                game.setSelectedY(startY);
-            }
 
-            //check if someone won
-            type win = gameWon();
-            if (win != type.neutral) {
-                if (win == type.white) {
-                    System.out.println("white wins");
-                    win_textField.setText("WHITE WINS");
-                    win_dialog.setVisible(true);
-                } else {
-                    System.out.println("black wins");
-                    win_textField.setText("BLACK WINS");
-                    win_dialog.setVisible(true);
+                //check if someone won
+                type win = gameWon();
+                if (win != type.neutral) {
+                    if (win == type.white) {
+                        System.out.println("white wins");
+                        win_textField.setText("WHITE WINS");
+                        win_dialog.setVisible(true);
+                    } else {
+                        System.out.println("black wins");
+                        win_textField.setText("BLACK WINS");
+                        win_dialog.setVisible(true);
+                    }
                 }
+                //render
+                ((BoardGraphicPanel) Board_panel).processData(this.game, state);
             }
-            //render
-            ((BoardGraphicPanel) Board_panel).processData(this.game, state);
         }
     }//GEN-LAST:event_Board_panelMousePressed
+
+    private void back_buttonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_back_buttonActionPerformed
+        //
+        
+        //if in game
+        if (state) {
+            int confirmation = JOptionPane.showConfirmDialog(null, "are you sure?");
+            if (confirmation == JOptionPane.YES_OPTION) {
+                state = false;
+                mainMenu();
+                back_button.setVisible(false);
+                ((BoardGraphicPanel) Board_panel).processData(this.game, state);
+            }
+        }
+        //if in rules
+        else {
+            state = false;
+            mainMenu();
+            back_button.setVisible(false);
+            rules_textArea.setVisible(false);
+            rules_scrollPane.setVisible(false);
+            ((BoardGraphicPanel) Board_panel).processData(this.game, state);
+        }
+    }//GEN-LAST:event_back_buttonActionPerformed
+
+    private void rules_buttonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rules_buttonActionPerformed
+        // TODO add your handling code here:
+        rules_textArea.setVisible(true);
+        rules_scrollPane.setVisible(true);
+        newGame_button.setVisible(false);
+        rules_button.setVisible(false);
+        back_button.setVisible(true);
+    }//GEN-LAST:event_rules_buttonActionPerformed
+
+    private void newGame_win_buttonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_newGame_win_buttonActionPerformed
+        
+        state = false;
+        ((BoardGraphicPanel) Board_panel).processData(game, state);
+        Board game = new Board();
+        this.game = game;
+        state = true;
+        mainMenu();
+        ((BoardGraphicPanel) Board_panel).processData(this.game, state);
+        back_button.setVisible(true);
+        win_dialog.setVisible(false);
+    }//GEN-LAST:event_newGame_win_buttonActionPerformed
+
+    private void menu_buttonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menu_buttonActionPerformed
+        state = false;
+        mainMenu();
+        ((BoardGraphicPanel) Board_panel).processData(this.game, state);
+        back_button.setVisible(false);
+        win_dialog.setVisible(false);
+    }//GEN-LAST:event_menu_buttonActionPerformed
 
     /**
      * @param args the command line arguments
@@ -257,9 +404,14 @@ public class Game extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel Board_panel;
+    private javax.swing.JButton back_button;
     private javax.swing.JButton menu_button;
     private javax.swing.JButton newGame_button;
     private javax.swing.JButton newGame_win_button;
+    private javax.swing.JButton rules_button;
+    private javax.swing.JScrollPane rules_scrollPane;
+    private javax.swing.JTextArea rules_textArea;
+    private javax.swing.JTextField title_textField;
     private javax.swing.JDialog win_dialog;
     private javax.swing.JTextField win_textField;
     // End of variables declaration//GEN-END:variables
@@ -351,5 +503,10 @@ public class Game extends javax.swing.JFrame {
             return type.black;
         }
         return type.neutral;
+    }
+
+    private void mainMenu() {
+        newGame_button.setVisible(!state);
+        rules_button.setVisible(!state);
     }
 }
