@@ -15,6 +15,7 @@ import javax.swing.JPanel;
  * @author mattanpaluy
  */
 public class BoardGraphicPanel extends JPanel {
+    //this class handles all the game graphics
 
     private Board game;
     private boolean state;
@@ -47,6 +48,8 @@ public class BoardGraphicPanel extends JPanel {
     }
 
     private void drawBoard(Graphics g) {
+        // this method draws the board
+
         g.setColor(Color.CYAN);
         g.fillRect(0, 0, getWidth(), getWidth());
         g.setColor(Color.BLUE);
@@ -80,6 +83,7 @@ public class BoardGraphicPanel extends JPanel {
     }
 
     private void drawPieces(Graphics g, Board game) {
+        // this method draws the pieces on the board
         int locationX = 60;
         int squareSize = 640 / 8;
 
@@ -115,6 +119,8 @@ public class BoardGraphicPanel extends JPanel {
     }
 
     private void drawSelected(Graphics g) {
+        // this method draws the selected piece and its legal moves
+
         //draw selected
         Color selectedColor = new Color(255, 0, 255, 125);
         int locationX = 60 + (80 * game.getSelectedX());
@@ -138,14 +144,15 @@ public class BoardGraphicPanel extends JPanel {
     }
 
     private void drawBase(Graphics g) {
+        // this method draws the the bases of the sides
+
         int locationX = 60;
         int locationY = 60;
         int squareSize = 640 / 8;
 
-        
         Graphics2D g2 = (Graphics2D) g;
         g2.setStroke(new BasicStroke(3));
-        
+
         g2.setColor(Color.WHITE);
         g2.drawRect(locationX, locationY + (squareSize * 5), squareSize * 3, squareSize * 3);
 

@@ -9,6 +9,8 @@ package com.vhscs3.corners;
  * @author mattanpaluy
  */
 public class Square {
+    //This class holds a piece that are on the board. 
+    //each square will have an enum type to indicate whether a square is a part of the white or black base or a nuetral square 
 
     private Piece piece;
     private type side;

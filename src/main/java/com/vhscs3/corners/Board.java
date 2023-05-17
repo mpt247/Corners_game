@@ -15,6 +15,9 @@ enum type {
 }
 
 public class Board {
+    //this class will be used as the base for the game. 
+    //Additionally, it will be used to calculate legal moves for a selected piece 
+    //The class will hold a matrix of squares
 
     private type turn;
     private Square[][] board;
@@ -82,9 +85,15 @@ public class Board {
         this.selectedY = selectedY;
     }
 
-    public int[][] getCurrLeagalMoves() {
+    public Square[][] getBoard() {
+        return board;
+    }
+
+    public int[][] getCurrLegalMoves() {
         return currLegalMoves;
     }
+
+ 
 
     public int[][] legalMove() {
         //this algorithm gets the x and y values for a current square and returns a 
@@ -117,25 +126,33 @@ public class Board {
     }
 
     private void calculateJumpMoves(int row, int col, boolean[][] visited) {
-    int[] rowDirections = {0, 0, -1, 1};
-    int[] colDirections = {-1, 1, 0, 0};
+        // calculates part 2 of the legal moves (the jumps)
+        int[] rowDirections = {0, 0, -1, 1};
+        int[] colDirections = {-1, 1, 0, 0};
 
-    visited[row][col] = true;
-    for (int k = 0; k < 4; k++) {
-        int newRow = row + rowDirections[k];
-        int newCol = col + colDirections[k];
-        int jumpRow = newRow + rowDirections[k];
-        int jumpCol = newCol + colDirections[k];
-        if (isInBounds(jumpRow, jumpCol) && isInBounds(newRow, newCol) && board[jumpRow][jumpCol].getPiece() == null && board[newRow][newCol].getPiece() != null && visited[jumpRow][jumpCol] == false) {
-            currLegalMoves[jumpRow][jumpCol] = LEGAL_MOVE;
+        visited[row][col] = true;
+        for (int k = 0; k < 4; k++) {
+            int newRow = row + rowDirections[k];
+            int newCol = col + colDirections[k];
+            int jumpRow = newRow + rowDirections[k];
+            int jumpCol = newCol + colDirections[k];
             
-            // Recursively check for further jumps from the new position
-            calculateJumpMoves(jumpRow, jumpCol, visited);
-        }
-    }
-    visited[row][col] = false;
-}
+            //if these 4 conditions are met its a legal move
+            /*
+               1. if the 2nd square is not occupied
+               2. if the 2nd square is on the board
+               3. if the 1st square is occupied
+               4. if the 2nd square is a square that hasn't been visited before
+            */
+            if (isInBounds(jumpRow, jumpCol) && isInBounds(newRow, newCol) && board[jumpRow][jumpCol].getPiece() == null && board[newRow][newCol].getPiece() != null && visited[jumpRow][jumpCol] == false) {
+                currLegalMoves[jumpRow][jumpCol] = LEGAL_MOVE;
 
+                // Recursively check for further jumps from the new position
+                calculateJumpMoves(jumpRow, jumpCol, visited);
+            }
+        }
+        visited[row][col] = false;
+    }
 
     private boolean isInBounds(int row, int col) {
         return row >= 0 && row < 8 && col >= 0 && col < 8;

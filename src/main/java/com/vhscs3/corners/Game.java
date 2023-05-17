@@ -14,11 +14,13 @@ import javax.swing.JOptionPane;
  * @author mattanpaluy
  */
 public class Game extends javax.swing.JFrame {
+    //holds most of the logic and hanldes the rest of the GUI which is not handled by the graphic panel
 
     /**
      * Creates new form Game
      */
     private Board game;
+    private Engine engine;
     private boolean state;
     private int startX = -1;
     private int startY = -1;
@@ -32,7 +34,7 @@ public class Game extends javax.swing.JFrame {
         rules_textArea.setVisible(false);
         rules_scrollPane.setVisible(false);
         mainMenu();
-        
+
     }
 
     /**
@@ -283,7 +285,7 @@ public class Game extends javax.swing.JFrame {
                 //a current square is selected and the evnt is to make a move
             } else {
                 //check if move is leagal if yes move
-                if (leagalMove(mouseX, mouseY)) {
+                if (legalMove(mouseX, mouseY)) {
                     gameMove(mouseX, mouseY);
                 } //if no the game assumes that the player is choosing to select another piece
                 else {
@@ -306,6 +308,7 @@ public class Game extends javax.swing.JFrame {
                         win_dialog.setVisible(true);
                     }
                 }
+                
                 //render
                 ((BoardGraphicPanel) Board_panel).processData(this.game, state);
             }
@@ -313,8 +316,8 @@ public class Game extends javax.swing.JFrame {
     }//GEN-LAST:event_Board_panelMousePressed
 
     private void back_buttonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_back_buttonActionPerformed
-        //
-        
+        //back button that returns to the main menu
+
         //if in game
         if (state) {
             int confirmation = JOptionPane.showConfirmDialog(null, "are you sure?");
@@ -324,8 +327,7 @@ public class Game extends javax.swing.JFrame {
                 back_button.setVisible(false);
                 ((BoardGraphicPanel) Board_panel).processData(this.game, state);
             }
-        }
-        //if in rules
+        } //if in rules
         else {
             state = false;
             mainMenu();
@@ -337,7 +339,7 @@ public class Game extends javax.swing.JFrame {
     }//GEN-LAST:event_back_buttonActionPerformed
 
     private void rules_buttonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rules_buttonActionPerformed
-        // TODO add your handling code here:
+        // show the rules
         rules_textArea.setVisible(true);
         rules_scrollPane.setVisible(true);
         newGame_button.setVisible(false);
@@ -346,7 +348,7 @@ public class Game extends javax.swing.JFrame {
     }//GEN-LAST:event_rules_buttonActionPerformed
 
     private void newGame_win_buttonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_newGame_win_buttonActionPerformed
-        
+        // a button to start a new game from the win screen. when pressed it will erase all previous data and create a new game
         state = false;
         ((BoardGraphicPanel) Board_panel).processData(game, state);
         Board game = new Board();
@@ -359,6 +361,7 @@ public class Game extends javax.swing.JFrame {
     }//GEN-LAST:event_newGame_win_buttonActionPerformed
 
     private void menu_buttonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menu_buttonActionPerformed
+        //sends you back to the main menu from the win screen
         state = false;
         mainMenu();
         ((BoardGraphicPanel) Board_panel).processData(this.game, state);
@@ -416,7 +419,8 @@ public class Game extends javax.swing.JFrame {
     private javax.swing.JTextField win_textField;
     // End of variables declaration//GEN-END:variables
     private int locationCalc(int cordinate) {
-        //when ran this method translates a given int on the 
+        //when ran this method translates a given int on the game panel to a number between 0 and 7 or -1 if not on the board
+        // to simplify calculations with pieces on the board
         if (cordinate > 55 || cordinate < 695) {
 
             if (cordinate > 615) {
@@ -441,6 +445,7 @@ public class Game extends javax.swing.JFrame {
     }
 
     private void gameMove(int endX, int endY) {
+        //handles the logic part of making a move 
 
         //start Square clean
         Square start = game.getSquare(startX, startY);
@@ -465,8 +470,10 @@ public class Game extends javax.swing.JFrame {
         }
     }
 
-    private boolean leagalMove(int endX, int endY) {
-        int[][] currLeagal = game.getCurrLeagalMoves();
+    private boolean legalMove(int endX, int endY) {
+        //checks if a move is in the matrix of legal moves for the current piece and returns a boolean
+
+        int[][] currLeagal = game.getCurrLegalMoves();
         if (currLeagal[endX][endY] == 1) {
             return true;
         }
@@ -474,6 +481,9 @@ public class Game extends javax.swing.JFrame {
     }
 
     private type gameWon() {
+        //checks if theres a winner
+        //returns neutral if no one won or black/white if someone won
+
         final int winCondition = 9;
         int white = 0;
         int black = 0;
@@ -506,6 +516,7 @@ public class Game extends javax.swing.JFrame {
     }
 
     private void mainMenu() {
+        //handles the buttons visiblity for the main menu 
         newGame_button.setVisible(!state);
         rules_button.setVisible(!state);
     }

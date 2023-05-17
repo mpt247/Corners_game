@@ -9,6 +9,7 @@ package com.vhscs3.corners;
  * @author mattanpaluy
  */
 public class Piece {
+    //this class represents a piece that will be held by a Square object, and contain a boolean for side
 
     //true = white, false = black
     private boolean side;
