@@ -153,9 +153,16 @@ public class BoardGraphicPanel extends JPanel {
         Graphics2D g2 = (Graphics2D) g;
         g2.setStroke(new BasicStroke(3));
 
+        Color blackBase = new Color(0, 0, 0, 125);
+        Color whiteBase = new Color(255, 255, 255, 125);
+
+        g2.setColor(whiteBase);
+        g2.fillRect(locationX, locationY + (squareSize * 5), squareSize * 3, squareSize * 3);
         g2.setColor(Color.WHITE);
         g2.drawRect(locationX, locationY + (squareSize * 5), squareSize * 3, squareSize * 3);
 
+        g2.setColor(blackBase);
+        g2.fillRect(locationX + (squareSize * 5), locationY, squareSize * 3, squareSize * 3);
         g2.setColor(Color.BLACK);
         g2.drawRect(locationX + (squareSize * 5), locationY, squareSize * 3, squareSize * 3);
     }

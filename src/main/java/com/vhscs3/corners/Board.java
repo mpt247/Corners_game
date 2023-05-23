@@ -93,8 +93,6 @@ public class Board {
         return currLegalMoves;
     }
 
- 
-
     public int[][] legalMove() {
         //this algorithm gets the x and y values for a current square and returns a 
         //matrix of leagal moves to be used for display and later for move validation.
@@ -136,14 +134,14 @@ public class Board {
             int newCol = col + colDirections[k];
             int jumpRow = newRow + rowDirections[k];
             int jumpCol = newCol + colDirections[k];
-            
+
             //if these 4 conditions are met its a legal move
             /*
                1. if the 2nd square is not occupied
                2. if the 2nd square is on the board
                3. if the 1st square is occupied
                4. if the 2nd square is a square that hasn't been visited before
-            */
+             */
             if (isInBounds(jumpRow, jumpCol) && isInBounds(newRow, newCol) && board[jumpRow][jumpCol].getPiece() == null && board[newRow][newCol].getPiece() != null && visited[jumpRow][jumpCol] == false) {
                 currLegalMoves[jumpRow][jumpCol] = LEGAL_MOVE;
 

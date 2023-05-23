@@ -158,7 +158,6 @@ public class Game extends javax.swing.JFrame {
         rules_textArea.setBackground(new java.awt.Color(0, 255, 255));
         rules_textArea.setColumns(20);
         rules_textArea.setFont(new java.awt.Font("Malayalam MN", 0, 18)); // NOI18N
-        rules_textArea.setForeground(new java.awt.Color(0, 0, 0));
         rules_textArea.setLineWrap(true);
         rules_textArea.setRows(5);
         rules_textArea.setText(" The game is played on a 8 x 8 grid board (chess-like board).\n Both players start off with square arrangements of 9 game pieces \n in opposing corners of the gameboard. \n Each player's goal is to move all their pieces from the starting corner \n to the corner occupied by the opponent at the start of the game\n (enemy base). Players take turns moving one game piece.\n A piece may move into an empty destination, \n provided either of the following conditions are met:\n\n 1.the destination square is adjacent to the starting square.\n 2.the destination square can be reached by consecutive \"jumps\" over\n    other game pieces belonging to either player.\n\n whoever can get their pieces to the enemy base first wins.");
@@ -308,7 +307,7 @@ public class Game extends javax.swing.JFrame {
                         win_dialog.setVisible(true);
                     }
                 }
-                
+
                 //render
                 ((BoardGraphicPanel) Board_panel).processData(this.game, state);
             }
@@ -418,6 +417,7 @@ public class Game extends javax.swing.JFrame {
     private javax.swing.JDialog win_dialog;
     private javax.swing.JTextField win_textField;
     // End of variables declaration//GEN-END:variables
+
     private int locationCalc(int cordinate) {
         //when ran this method translates a given int on the game panel to a number between 0 and 7 or -1 if not on the board
         // to simplify calculations with pieces on the board
